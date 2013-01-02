@@ -1,0 +1,3 @@
+-keep class com.cyanogenmod.chronus.preference.Preferences {
+  *;
+}
