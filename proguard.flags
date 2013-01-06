@@ -1,3 +1,7 @@
+<<<<<<< HEAD
 -keep class com.cyanogenmod.chronus.preference.Preferences {
+=======
+-keep class com.cyanogenmod.lockclock.preference.Preferences {
+>>>>>>> 2a280cb... Get rid of warnings and deprecation suppression.
   *;
 }
