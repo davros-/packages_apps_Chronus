@@ -53,12 +53,4 @@
             android:defaultValue="true" />
     </PreferenceCategory>
 
-    <PreferenceCategory
-        android:title="@string/general_category" >
-
-        <CheckBoxPreference
-            android:key="clock_show_alarm"
-            android:title="@string/show_alarm_title"
-            android:defaultValue="true" />
-    </PreferenceCategory>
 </PreferenceScreen>
