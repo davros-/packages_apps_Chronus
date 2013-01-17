@@ -17,7 +17,6 @@
 package com.cyanogenmod.chronus.preference;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
@@ -30,41 +29,18 @@ import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
-import com.cyanogenmod.chronus.misc.Constants;
 import com.cyanogenmod.chronus.R;
-
-import static com.cyanogenmod.chronus.misc.Constants.PREF_NAME;
+import com.cyanogenmod.chronus.misc.Constants;
 
 import java.util.List;
 
-public class Preferences extends PreferenceActivity
-        implements SharedPreferences.OnSharedPreferenceChangeListener {
-
+public class Preferences extends PreferenceActivity {
     private static final String TAG = "LockClock Preferences";
-
-    private SharedPreferences mPreferences;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mPreferences = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mPreferences.registerOnSharedPreferenceChangeListener(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mPreferences.unregisterOnSharedPreferenceChangeListener(this);
-    }
 
     @Override
     public void onBuildHeaders(List<Header> target) {
         loadHeadersFromResource(R.xml.preferences_headers, target);
+
         updateHeaders(target);
     }
 
@@ -85,18 +61,13 @@ public class Preferences extends PreferenceActivity
         }
     }
 
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        SharedPreferences.Editor editor = mPreferences.edit();
-        editor.putBoolean(Constants.PREFERENCES_CHANGED, true);
-        editor.commit();
-    }
-
     public static class ClockFragment extends PreferenceFragment {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+
             addPreferencesFromResource(R.xml.preferences_clock);
+
         }
     }
 
@@ -104,6 +75,7 @@ public class Preferences extends PreferenceActivity
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+
             addPreferencesFromResource(R.xml.preferences_weather);
         }
     }
@@ -112,6 +84,7 @@ public class Preferences extends PreferenceActivity
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+
             addPreferencesFromResource(R.xml.preferences_calendar);
         }
     }
@@ -162,6 +135,7 @@ public class Preferences extends PreferenceActivity
 
         public HeaderAdapter(Context context, List<Header> objects) {
             super(context, 0, objects);
+
             mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
 
