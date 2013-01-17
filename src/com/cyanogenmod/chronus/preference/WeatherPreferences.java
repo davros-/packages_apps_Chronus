@@ -117,7 +117,7 @@ public class WeatherPreferences extends PreferenceFragment implements
         for (String k : LOCATION_PREF_KEYS) {
             if (TextUtils.equals(key, k)) {
                 // location pref has changed -> clear out woeid cache
-                com.cyanogenmod.lockclock.misc.Preferences.setCachedWoeid(mContext, null);
+                com.cyanogenmod.chronus.misc.Preferences.setCachedWoeid(mContext, null);
                 break;
             }
         }
@@ -143,7 +143,7 @@ public class WeatherPreferences extends PreferenceFragment implements
     @Override
     public boolean onPreferenceClick(Preference preference) {
         if (preference == mCustomWeatherLoc) {
-            String location = com.cyanogenmod.lockclock.misc.Preferences.customWeatherLocation(mContext);
+            String location = com.cyanogenmod.chronus.misc.Preferences.customWeatherLocation(mContext);
             if (location != null) {
                 mCustomWeatherLoc.getEditText().setText(location);
                 mCustomWeatherLoc.getEditText().setSelection(location.length());
@@ -204,7 +204,7 @@ public class WeatherPreferences extends PreferenceFragment implements
 
     private void updateLocationSummary() {
         if (mUseCustomLoc.isChecked()) {
-            String location = com.cyanogenmod.lockclock.misc.Preferences.customWeatherLocation(mContext);
+            String location = com.cyanogenmod.chronus.misc.Preferences.customWeatherLocation(mContext);
             if (location == null) {
                 location = getResources().getString(R.string.unknown);
             }
