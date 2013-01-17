@@ -32,8 +32,8 @@ import android.os.PowerManager.WakeLock;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.cyanogenmod.lockclock.ClockWidgetProvider;
-import com.cyanogenmod.lockclock.misc.Preferences;
+import com.cyanogenmod.chronus.ClockWidgetProvider;
+import com.cyanogenmod.chronus.misc.Preferences;
 
 import java.io.IOException;
 import java.util.Date;
