@@ -46,7 +46,7 @@ public class WeatherUpdateService extends Service {
 
     private static final String URL_YAHOO_API_WEATHER = "http://weather.yahooapis.com/forecastrss?w=%s&u=";
 
-    public static final String ACTION_FORCE_UPDATE = "com.cyanogenmod.lockclock.action.FORCE_WEATHER_UPDATE";
+    public static final String ACTION_FORCE_UPDATE = "com.cyanogenmod.chronus.action.FORCE_WEATHER_UPDATE";
 
     private WeatherUpdateTask mTask;
 
