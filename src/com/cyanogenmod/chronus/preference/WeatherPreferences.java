@@ -44,6 +44,7 @@ import android.widget.Toast;
 import com.cyanogenmod.chronus.ClockWidgetProvider;
 import com.cyanogenmod.chronus.R;
 import com.cyanogenmod.chronus.misc.Constants;
+import com.cyanogenmod.chronus.misc.Preferences;
 import com.cyanogenmod.chronus.weather.WeatherUpdateService;
 import com.cyanogenmod.chronus.weather.YahooPlaceFinder;
 
@@ -55,9 +56,8 @@ public class WeatherPreferences extends PreferenceFragment implements
         Constants.WEATHER_USE_CUSTOM_LOCATION,
         Constants.WEATHER_CUSTOM_LOCATION_STRING
     };
-    private static final String[] FORCE_REFRESH_KEYS = new String[] {
-        Constants.WEATHER_USE_CUSTOM_LOCATION,
-        Constants.WEATHER_CUSTOM_LOCATION_STRING,
+    private static final String[] WEATHER_REFRESH_KEYS = new String[] {
+        Constants.SHOW_WEATHER,
         Constants.WEATHER_REFRESH_INTERVAL
     };
 
@@ -114,25 +114,40 @@ public class WeatherPreferences extends PreferenceFragment implements
             updateLocationSummary();
         }
 
+        boolean needWeatherUpdate = false;
+        boolean forceWeatherUpdate = false;
+
         for (String k : LOCATION_PREF_KEYS) {
             if (TextUtils.equals(key, k)) {
                 // location pref has changed -> clear out woeid cache
-                com.cyanogenmod.chronus.misc.Preferences.setCachedWoeid(mContext, null);
+                Preferences.setCachedWoeid(mContext, null);
+                forceWeatherUpdate = true;
                 break;
             }
         }
 
-        boolean needWeatherUpdate = false;
-        for (String k : FORCE_REFRESH_KEYS) {
+        for (String k : WEATHER_REFRESH_KEYS) {
             if (TextUtils.equals(key, k)) {
                 needWeatherUpdate = true;
                 break;
             }
         }
 
-        if (needWeatherUpdate) {
+        if (Constants.DEBUG) {
+            Log.v(TAG, "Preference " + key + " changed, need update " +
+                    needWeatherUpdate + " force update "  + forceWeatherUpdate);
+        }
+
+        if (Preferences.showWeather(mContext) && (needWeatherUpdate || forceWeatherUpdate)) {
             Intent updateIntent = new Intent(mContext, WeatherUpdateService.class);
-            updateIntent.setAction(WeatherUpdateService.ACTION_FORCE_UPDATE);
+            if (forceWeatherUpdate) {
+                updateIntent.setAction(WeatherUpdateService.ACTION_FORCE_UPDATE);
+            }
+            mContext.startService(updateIntent);
+        }
+
+        Intent updateIntent = new Intent(mContext, ClockWidgetProvider.class);
+        mContext.sendBroadcast(updateIntent);
     }
 
     @Override
