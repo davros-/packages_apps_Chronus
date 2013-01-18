@@ -86,3 +86,4 @@ public class WidgetUtils {
         }
         return 1f;
     }
+}
