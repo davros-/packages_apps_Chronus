@@ -95,9 +95,12 @@ public class WeatherUpdateService extends Service {
             return false;
         }
 
+        if (!Preferences.showWeather(this)) {
+            return false;
+        }
+
         long interval = Preferences.weatherRefreshIntervalInMs(this);
         if (interval == 0 && !force) {
-	    Log.d(TAG, "manual only");
             return false;
         }
 
@@ -224,7 +227,7 @@ public class WeatherUpdateService extends Service {
             if (result != null) {
                 long now = System.currentTimeMillis();
                 Preferences.setCachedWeatherInfo(mContext, now, result);
-                scheduleUpdate(mContext, Preferences.weatherRefreshIntervalInMs(mContext), false);
+                scheduleUpdate(mContext, Preferences.weatherRefreshIntervalInMs(mContext));
 
                 Intent updateIntent = new Intent(mContext, ClockWidgetProvider.class);
                 sendBroadcast(updateIntent);
@@ -234,7 +237,7 @@ public class WeatherUpdateService extends Service {
             } else {
                 /* failure, schedule next download in 30 minutes */
                 long interval = 30 * 60 * 1000;
-                scheduleUpdate(mContext, interval, false);
+                scheduleUpdate(mContext, interval);
             }
 
             mWakeLock.release();
@@ -242,13 +245,23 @@ public class WeatherUpdateService extends Service {
         }
     }
 
+    private static void scheduleUpdate(Context context, long timeFromNow) {
+        AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        long due = System.currentTimeMillis() + timeFromNow;
+
+        if (LOGV) {
+            Log.v(TAG, "Scheduling next update at " + new Date(due));
+        }
+        am.set(AlarmManager.RTC_WAKEUP, due, getUpdateIntent(context, false));
+    }
+
     public static void scheduleNextUpdate(Context context) {
         long lastUpdate = Preferences.lastWeatherUpdateTimestamp(context);
         if (lastUpdate == 0) {
-            scheduleUpdate(context, 0, false);
+            scheduleUpdate(context, 0);
         } else {
             long interval = Preferences.weatherRefreshIntervalInMs(context);
-            scheduleUpdate(context, lastUpdate + interval - System.currentTimeMillis(), false);
+            scheduleUpdate(context, lastUpdate + interval - System.currentTimeMillis());
         }
     }
 
@@ -257,18 +270,7 @@ public class WeatherUpdateService extends Service {
         if (force) {
             i.setAction(ACTION_FORCE_UPDATE);
         }
-	Log.d(TAG, "getUpdateIntent " + i);
         return PendingIntent.getService(context, 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
-    }
-
-    public static void scheduleUpdate(Context context, long timeFromNow, boolean force) {
-        AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        long due = System.currentTimeMillis() + timeFromNow;
-
-        if (LOGV) {
-            Log.v(TAG, "Scheduling next " + (force ? "forced " : "") + " update at " + new Date(due));
-        }
-        am.set(AlarmManager.RTC_WAKEUP, due, getUpdateIntent(context, force));
     }
 
     public static void cancelUpdates(Context context) {

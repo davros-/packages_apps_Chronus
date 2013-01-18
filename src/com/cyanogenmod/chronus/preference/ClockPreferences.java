@@ -31,7 +31,6 @@ import com.cyanogenmod.chronus.misc.Constants;
 
 public class ClockPreferences extends PreferenceFragment implements
     OnSharedPreferenceChangeListener {
-    private static final String TAG = "Clock Preferences";
 
     private Context mContext;
 

@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CalendarInfo {
-    private static final String TAG = "CalendarInfo";
     private static List<EventInfo> mEventsList;
     private static long mFollowingEventStart;
 

@@ -49,7 +49,7 @@ import com.cyanogenmod.chronus.weather.YahooPlaceFinder;
 
 public class WeatherPreferences extends PreferenceFragment implements
         OnPreferenceClickListener, OnSharedPreferenceChangeListener {
-    private static final String TAG = "Weather Preferences";
+    private static final String TAG = "WeatherPreferences";
 
     private static final String[] LOCATION_PREF_KEYS = new String[] {
         Constants.WEATHER_USE_CUSTOM_LOCATION,
@@ -133,11 +133,6 @@ public class WeatherPreferences extends PreferenceFragment implements
         if (needWeatherUpdate) {
             Intent updateIntent = new Intent(mContext, WeatherUpdateService.class);
             updateIntent.setAction(WeatherUpdateService.ACTION_FORCE_UPDATE);
-            mContext.startService(updateIntent);
-        } else {
-            Intent updateIntent = new Intent(mContext, ClockWidgetProvider.class);
-            mContext.sendBroadcast(updateIntent);
-        }
     }
 
     @Override

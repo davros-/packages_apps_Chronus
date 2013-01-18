@@ -40,8 +40,7 @@ import java.util.List;
 
 public class CalendarPreferences extends PreferenceFragment implements
     OnSharedPreferenceChangeListener {
-    private static final String TAG = "Calendar Preferences";
-
+ 
     private Context mContext;
 
     @Override

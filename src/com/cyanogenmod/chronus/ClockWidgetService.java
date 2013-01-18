@@ -559,27 +559,31 @@ public class ClockWidgetService extends IntentService {
         }
 
         // check for first event outside of lookahead window
-        now += lookahead;
+        long endOfLookahead = now + lookahead;
+        long minUpdateTime = getMinUpdateFromNow(endOfLookahead);
 
-        if (where.length() > 0) {
-            where.append(" AND ");
-        }
-        where.append(CalendarContract.Instances.BEGIN);
-        where.append(" > ");
-        where.append(now);
+        // don't bother with querying if the end result is later than the
+        // minimum update time anyway
+        if (endOfLookahead < minUpdateTime) {
+            if (where.length() > 0) {
+                where.append(" AND ");
+            }
+            where.append(CalendarContract.Instances.BEGIN);
+            where.append(" > ");
+            where.append(endOfLookahead);
 
-        uri = Uri.withAppendedPath(CalendarContract.Instances.CONTENT_URI,
-                String.format("%d/%d", now, getMinUpdateFromNow(now)));
-        projection = new String[] { CalendarContract.Instances.BEGIN };
-        cursor = getContentResolver().query(uri, projection,
-                    where.toString(), null,
+            uri = Uri.withAppendedPath(CalendarContract.Instances.CONTENT_URI,
+                    String.format("%d/%d", endOfLookahead, minUpdateTime));
+            projection = new String[] { CalendarContract.Instances.BEGIN };
+            cursor = getContentResolver().query(uri, projection, where.toString(), null,
                     CalendarContract.Instances.BEGIN + " ASC limit 1");
 
-        if (cursor != null) {
-            if (cursor.moveToFirst()) {
-                mCalendarInfo.setFollowingEventStart(cursor.getLong(0));
+            if (cursor != null) {
+                if (cursor.moveToFirst()) {
+                    mCalendarInfo.setFollowingEventStart(cursor.getLong(0));
+                }
+                cursor.close();
             }
-            cursor.close();
         }
     }
 

@@ -26,8 +26,6 @@ import android.util.TypedValue;
 import com.cyanogenmod.chronus.R;
 
 public class WidgetUtils {
-    static final String TAG = "WidgetUtils";
-
     //===============================================================================================
     // Widget display and resizing related functionality
     //===============================================================================================
@@ -88,4 +86,3 @@ public class WidgetUtils {
         }
         return 1f;
     }
-}

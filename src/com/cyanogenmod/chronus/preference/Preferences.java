@@ -35,8 +35,7 @@ import com.cyanogenmod.chronus.misc.Constants;
 import java.util.List;
 
 public class Preferences extends PreferenceActivity {
-    private static final String TAG = "LockClock Preferences";
-
+    
     @Override
     public void onBuildHeaders(List<Header> target) {
         loadHeadersFromResource(R.xml.preferences_headers, target);
